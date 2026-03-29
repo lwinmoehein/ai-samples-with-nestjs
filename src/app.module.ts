@@ -3,11 +3,12 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
-import { Feedback } from './feedbacks/feedbacks.entity';
-import { FeedbacksService } from './feedbacks/feedbacks.service';
+import { Feedback } from './feedbacks/feedback.entity';
+import { FeedbackModule } from './feedbacks/feedbackModule';
 
 @Module({
   imports: [
+    // DB
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',
@@ -21,10 +22,11 @@ import { FeedbacksService } from './feedbacks/feedbacks.service';
       synchronize: true,
     }),
 
-    TypeOrmModule.forFeature([Feedback]),
+    // Features
+    FeedbackModule
   ],
   controllers: [AppController],
-  providers: [AppService,FeedbacksService],
+  providers: [AppService],
 })
 export class AppModule {
   constructor(private dataSource: DataSource) {}
