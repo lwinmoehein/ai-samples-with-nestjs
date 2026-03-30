@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Query, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Post, Query, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { NoteService } from './note.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
@@ -39,6 +39,21 @@ export class NoteController {
     }
   }
 
+  @Get("note")
+  async getAll(){
+    let results = await this.noteService.getAllNotes();
+
+    let mappedResults = results.map(r=>{
+      return {
+        id:r.id,
+        content:r.content,
+        image:r.image?.toString('base64')
+      }
+    });
+
+    return mappedResults;
+  }
+
   @Get("note/search")
   async search(
     @Query('q') query: string,
@@ -49,7 +64,7 @@ export class NoteController {
       return {
         id:r.id,
         content:r.content,
-        image:r.image.toString('base64')
+        image:r.image?.toString('base64')
       }
     });
 
@@ -74,10 +89,17 @@ export class NoteController {
       return {
         id:r.id,
         content:r.content,
-        image:r.image.toString('base64')
+        image:r.image?.toString('base64')
       }
     });
 
     return mappedResults;
+  }
+
+  @Delete("note")
+  async delete(
+    @Query('id') id: number,
+  ){
+    return await this.noteService.delete(id);
   }
 }

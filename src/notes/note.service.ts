@@ -34,6 +34,13 @@ export class NoteService {
     })
   }
 
+  async getAllNotes() {
+    return await this.noteRepository
+      .createQueryBuilder('f')
+      .orderBy('id', 'ASC')
+      .getMany();
+  }
+
   async findRelevantContents(queryText: string) {
     const queryVector = await this.embeddingService.generateVector(queryText);
     const vectorString = `[${queryVector.join(',')}]`;
@@ -42,7 +49,6 @@ export class NoteService {
       .createQueryBuilder('f')
       .orderBy('f.content_embedding <=> :targetVector', 'ASC')
       .setParameter('targetVector', vectorString)
-      .limit(5)
       .getMany();
   }
   async findRelevantImages(imageAttachment: Express.Multer.File) {
@@ -54,7 +60,14 @@ export class NoteService {
       .createQueryBuilder('f')
       .orderBy('f.image_embedding <=> :targetVector', 'ASC')
       .setParameter('targetVector', vectorString)
-      .limit(5)
       .getMany();
+  }
+
+  async delete(id:number) {
+    await this.noteRepository.delete(id);
+
+    return {
+
+    }
   }
 }
