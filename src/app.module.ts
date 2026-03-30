@@ -3,8 +3,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
-import { Feedback } from './feedbacks/feedback.entity';
-import { FeedbackModule } from './feedbacks/feedbackModule';
+import { Note } from './notes/note.entity';
+import { NodeModule } from './notes/node.module';
 
 @Module({
   imports: [
@@ -17,13 +17,14 @@ import { FeedbackModule } from './feedbacks/feedbackModule';
       password: 'mysecretpassword',
       database: 'rag_database',
       entities: [
-        Feedback
+        Note
       ],
+
       synchronize: true,
     }),
 
     // Features
-    FeedbackModule
+    NodeModule
   ],
   controllers: [AppController],
   providers: [AppService],
