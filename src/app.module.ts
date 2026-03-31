@@ -6,6 +6,7 @@ import { DataSource } from 'typeorm';
 import { Note } from './notes/note.entity';
 import { NodeModule } from './notes/node.module';
 import * as dotenv from 'dotenv';
+import * as process from 'node:process';
 dotenv.config();
 
 @Module({
@@ -32,5 +33,7 @@ dotenv.config();
   providers: [AppService],
 })
 export class AppModule {
-  constructor(private dataSource: DataSource) {}
+  constructor(private dataSource: DataSource) {
+    console.log(process.env);
+  }
 }
